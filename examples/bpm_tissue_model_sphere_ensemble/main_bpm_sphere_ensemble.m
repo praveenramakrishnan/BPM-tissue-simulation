@@ -238,13 +238,6 @@ else
     saveas(figure_bpm_1d_along_y, append(output_directory, ...
         'figure_bpm_sphere_ensemble_along_y.png'));
 end
-% Clean up directory and move all outputs to right folder
-if ~isempty(dir('*.mat'))
-    system(append('mv *.mat ', output_directory));
-end
-% if ~isempty(dir('nohup_*'))
-%     system(append('mv nohup_* ', output_directory));
-% end
 
 display('End of BPM simulation');
 
