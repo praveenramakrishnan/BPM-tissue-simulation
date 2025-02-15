@@ -11,7 +11,6 @@ recompute_bpm_solution = true;
 
 show_plot = true;
 z_grid_measurement = 0e-6; % z coordinate at which BPM output is computed
-num_bpm_planes = 150;
 refractive_index_default = 1.3333;
 
 % Load BPM input parameters

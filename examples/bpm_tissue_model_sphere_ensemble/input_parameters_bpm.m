@@ -28,6 +28,9 @@ illorigin = [round(I/2), round(J/2), K_focus];
 % Additional shift in z axis
 z_launch = 0;
 
+% Number of planes used in BPM computation
+num_bpm_planes = 150;
+
 % Number of slices into which region is divided.
 % This reduces memory requirement by loading refractive index data in smaller chunks.
 num_region_slices = 2;
