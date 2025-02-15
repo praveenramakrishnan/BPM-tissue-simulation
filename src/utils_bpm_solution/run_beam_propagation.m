@@ -1,6 +1,5 @@
 function [efield_propagated] = run_beam_propagation(efield_initial, x_grid, y_grid, ...
-        num_bpm_planes, length_along_z, apply_phase_correction, ...
-        refractive_index_data, lambda)
+        num_bpm_planes, length_along_z, refractive_index_data, lambda, apply_phase_correction)
 
     refractive_index_average = mean(refractive_index_data(:));
 
