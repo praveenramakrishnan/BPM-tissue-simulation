@@ -11,9 +11,7 @@ recompute_bpm_solution = true;
 
 show_plot = true;
 z_grid_measurement = 0e-6; % z coordinate at which BPM output is computed
-if use_refractive_index_default
-    refractive_index_default = 1.3333;
-end
+refractive_index_default = 1.3333; % used as background medium if not specified and as immersion medium
 
 % Load BPM input parameters
 filename_input_parameters = 'input_parameters_bpm';
@@ -53,7 +51,8 @@ else
     efield_illumination_function = 'efield_focused_gauss_rotsim_1D';
 end
 
-% BPM simulation without phase correction is same as background simulation
+% BPM simulation without phase correction is same as simulating
+% homogeneous region with average refractive index.
 if simulate_background
     apply_phase_correction = false;
     filename_bpm_efield_output = append(output_directory, 'efield_background.mat');
@@ -89,7 +88,7 @@ display("End make grid");
 
 display("Start make source");
 if recompute_efield_initial
-    efield_initial = make_source(efield_illumination_function, x_grid, y_grid, z_grid, lambda);
+    efield_initial = make_source(efield_illumination_function, x_grid, y_grid, z_grid, lambda, refractive_index_default );
     save(filename_efield_initial, 'efield_initial', '-v7.3');
 else
     efield_initial = load(filename_efield_initial).efield_initial;

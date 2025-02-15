@@ -1,10 +1,13 @@
-%This function is called by iteratefdtd_matrix to set the electric
-%field source terms
-%
-function [E] = efield_focused_gauss_rotsim(X,Y,Z, lambda)
-    if nargin < 4
-        % Default value of wavelength
+function [E] = efield_focused_gauss_rotsim(X,Y,Z, lambda, nvec, NA, ntheta, nphi)
+    arguments
+        X;
+        Y;
+        Z;
+        % Default parameters 
         lambda = 920e-9;
+        nvec = 1.3333; 
+        ntheta = 1600;
+        nphi = 2000;    NA = 1.05;
     end
     
     RHO = sqrt(X.^2 + Y.^2);
@@ -15,13 +18,7 @@ function [E] = efield_focused_gauss_rotsim(X,Y,Z, lambda)
     E{3} = zeros(size(X));
 
     vertices = [X(:) Y(:) Z(:)];
-    nvec = 1.3333; 
     hvec = [];
-    NA = 1.05;
-    ntheta = 1600;
-    nphi = 2000;
-    %ntheta = 200;
-    %nphi = 200;
     polfun = @gauss_pol;
     
     theta = pi/4;
