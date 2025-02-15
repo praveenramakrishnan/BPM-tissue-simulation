@@ -1,13 +1,25 @@
-function [efield_propagated] = run_beam_propagation(efield_initial, num_grid_points_x, num_grid_points_y, ...
-        num_grid_points_z, step_size_z, frequency_z_grid_nd, apply_phase_correction, num_grid_points_z_ri, ...
-        refractive_index_data, lambda, refractive_index_average)
+function [efield_propagated] = run_beam_propagation(efield_initial, x_grid, y_grid, ...
+        num_bpm_planes, length_along_z, apply_phase_correction, ...
+        refractive_index_data, lambda)
+
+    refractive_index_average = mean(refractive_index_data(:));
+
+    [frequency_x_grid, frequency_y_grid] = compute_fft_frequencies(x_grid, y_grid);
+    [frequency_x_ndgrid, frequency_y_ndgrid] = ndgrid(frequency_x_grid, frequency_y_grid);
+    frequency_z_ndgrid = sqrt(refractive_index_average^2/lambda^2 ...
+        - frequency_x_ndgrid.^2 - frequency_y_ndgrid.^2);
+
+    num_grid_points_x = length(x_grid);
+    num_grid_points_y = length(y_grid);
+    num_grid_points_z = size(refractive_index_data, 3);
+
+    step_size_z = length_along_z/num_bpm_planes;
     
     efield_propagated = efield_initial;
-
-    for iloop=1:num_grid_points_z 
-        efield_propagated_homogeneous = bpm_propagate_homogeneous(efield_propagated, step_size_z, frequency_z_grid_nd);
+    for iloop=1:num_bpm_planes 
+        efield_propagated_homogeneous = bpm_propagate_homogeneous(efield_propagated, step_size_z, frequency_z_ndgrid);
         if apply_phase_correction
-            iloop_refractive_index_data = ceil(iloop*num_grid_points_z_ri/num_grid_points_z);
+            iloop_refractive_index_data = ceil(iloop*num_grid_points_z/num_bpm_planes);
             refractive_index_data_2d_mapped = map_refractive_index_grid( ...
                 refractive_index_data(:,:, iloop_refractive_index_data), num_grid_points_x, num_grid_points_y);
             refractive_index_difference = refractive_index_data_2d_mapped - refractive_index_average;
