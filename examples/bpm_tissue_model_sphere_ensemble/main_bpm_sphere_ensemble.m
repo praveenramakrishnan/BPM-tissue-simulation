@@ -139,8 +139,7 @@ for iloop_slice = 1:num_region_slices
         display(append('Elapsed simulation time = ', num2str(time_toc), ' seconds'));
         save(filename_bpm_efield_output, 'efield_propagated_bpm', 'x_grid', 'y_grid');
     elseif exist(filename_bpm_efield_output)
-        data_efield_bpm = load(filename_bpm_efield_output); 
-        efield_propagated_bpm = data_efield_bpm.efield_propagated_bpm; 
+        efield_propagated_bpm = load(filename_bpm_efield_output).efield_propagated_bpm;
     else
         error(append('File ', filename_bpm_efield_output, ' not found.'));
     end
@@ -197,7 +196,6 @@ else
         'figure_bpm_sphere_ensemble_2d.png'));
 end
 
-% Plot results
 figure_bpm_1d_along_x = figure(1);
 plot(1e6*x_grid, abs(efield_propagated_bpm(:, find(y_grid==0))), 'DisplayName', 'BPM');
 hold off;

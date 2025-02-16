@@ -3,8 +3,11 @@
 %This function is called by iteratefdtd_matrix to set the electric
 %field source terms
 %
-function [E] = efield_plane(X,Y,Z, lamdba, nvec)
-    if nargin < 5
+function [E] = efield_plane(X,Y,Z, lambda, nvec)
+    arguments
+        X;
+        Y;
+        Z;
         % Default value of wavelength
         lambda = 920e-9;
         nvec = 1.3333;
