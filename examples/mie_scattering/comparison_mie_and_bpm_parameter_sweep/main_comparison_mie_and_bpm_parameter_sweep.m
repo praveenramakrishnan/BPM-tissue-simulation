@@ -190,5 +190,5 @@ for iloop_medium = 1:num_refractive_indices
 end
 
 if ~isempty(dir('*.mat'))
-    system(append('rm *.mat ', output_directory));
+    system('rm *.mat ');
 end
