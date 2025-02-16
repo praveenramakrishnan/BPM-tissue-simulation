@@ -189,6 +189,7 @@ for iloop_medium = 1:num_refractive_indices
     end
 end
 
+% Clean the directory
 if ~isempty(dir('*.mat'))
     system('rm *.mat ');
 end
