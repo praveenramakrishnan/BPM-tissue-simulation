@@ -165,7 +165,7 @@ saveas(figure_comparison_1d_along_x, append(output_directory, ...
 figure_bpm_1d_along_y = figure(5);
 plot(1e6*y_grid, abs(efield_propagated_bpm(find(x_grid==0), :)), 'DisplayName', 'BPM');
 hold on;
-plot(1e6*y_grid, abs(efield_propagated_mie(find(x_grid==0), :, end)), 'DisplayName', 'BPM');
+plot(1e6*y_grid, abs(efield_propagated_mie(find(x_grid==0), :, end)), 'DisplayName', 'Mie');
 xlabel('y ($\mu$m)', 'interpreter', 'latex');
 ylabel('|E| (V/m)');
 xlim([min(1e6*x_grid), max(1e6*x_grid)]);
