@@ -34,6 +34,7 @@ refractive_index_sphere = 1.4;
 refractive_index_background = 1.3333;
 radius_sphere = 2*lambda;
 
+% Minimum number of terms in mie series calculation
 num_terms_mie = 50;
 
 save(append(mfilename, '.mat'));
