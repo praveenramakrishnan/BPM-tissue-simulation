@@ -160,7 +160,7 @@ xlim([min(1e6*x_grid), max(1e6*x_grid)]);
 legend;
 grid on;
 saveas(figure_comparison_1d_along_x, append(output_directory, ...
-    'figure_comparison_along_x_background.png'));
+    'figure_comparison_along_x.png'));
 
 figure_bpm_1d_along_y = figure(5);
 plot(1e6*y_grid, abs(efield_propagated_bpm(find(x_grid==0), :)), 'DisplayName', 'BPM');
@@ -172,5 +172,5 @@ xlim([min(1e6*x_grid), max(1e6*x_grid)]);
 legend('location', 'northeast');
 grid on;
 saveas(figure_bpm_1d_along_y, append(output_directory, ...
-    'figure_comparison_along_y_background.png'));
+    'figure_comparison_along_y.png'));
 
