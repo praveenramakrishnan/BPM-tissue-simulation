@@ -7,6 +7,12 @@ model of the tissue. The randomly distributed ensemble of spheres of a specified
 
 # Running the simulation and generating the output
 - Running 'main_bpm_sphere_ensemble.m' generates the outputs. The names of the generated output folders and files can be changed in the main file.
-- The main file also contains a few simulation parameters.
+- The main file also contains a few additional simulation parameters.
+  For example, the variable source_type can be used to specify either
+  a plane wave or focused beam source.
+  Alternatively, the source can be specified directly by specifying
+  the function 'efield_illumination_function'.
 - An output data file (by default 'output_data_sphere_code/') will store the data related to the centers and radii of the sphere ensemble.
 - The output electric field data will be store in the specified output folder (by default starts with 'simulation_bpm_.../')
+
+
