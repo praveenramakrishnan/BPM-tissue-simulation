@@ -19,9 +19,9 @@ run(filename_input_parameters);
 data_input = load(filename_input_parameters);
 
 % Lengths as multiples of wavelength
-num_lambda_x = num2str(data_input.length_along_x/data_input.lambda);
-num_lambda_y = num2str(data_input.length_along_y/data_input.lambda);
-num_lambda_z = num2str(data_input.length_along_z/data_input.lambda);
+num_lambda_x = num2str(length_along_x/lambda);
+num_lambda_y = num2str(length_along_y/lambda);
+num_lambda_z = num2str(length_along_z/lambda);
 
 % Select source type (plane wave or focused beam)
 % source_type = 'plane';
