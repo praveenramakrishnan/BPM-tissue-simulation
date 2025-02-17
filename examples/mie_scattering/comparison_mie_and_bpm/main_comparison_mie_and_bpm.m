@@ -66,7 +66,7 @@ display("End Mie solution");
 display("Start make source");
 if recompute_efield_initial
     efield_illumination_function = 'efield_plane';
-    efield_initial = make_source(efield_illumination_function, x_grid, y_grid, z_grid, lambda, refractive_index_background );
+    efield_initial = make_source(efield_illumination_function, x_grid, y_grid, z_grid, lambda, refractive_index_background);
     save(filename_efield_initial, 'efield_initial', '-v7.3');
 elseif exist(filename_efield_initial)
     efield_initial = load(filename_efield_initial).efield_initial;
@@ -102,8 +102,8 @@ if recompute_bpm_solution
     efield_propagated_bpm = run_beam_propagation( ...
         efield_initial,  x_grid, y_grid, ...
         num_bpm_planes, length_along_z, ...
-        refractive_index_data, lambda, ...
-        apply_phase_correction);
+        refractive_index_data, refractive_index_background, ...
+        lambda, apply_phase_correction);
         save(filename_bpm_efield_output, 'efield_propagated_bpm', 'x_grid', 'y_grid');
 elseif exist(filename_bpm_efield_output)
     efield_propagated_bpm = load(filename_bpm_efield_output).efield_propagated_bpm; 
