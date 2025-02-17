@@ -71,7 +71,6 @@ run(filename_sphere_ensemble_params);
 filename_sphere_ensemble_params = append(output_directory, ...
     filename_sphere_ensemble_params);
 
-refractive_index_background = load(filename_sphere_ensemble_params).refractive_index_background;
 % Move created data files to output directory
 if ~isempty(dir('*.mat'))
     system(append('mv *.mat ', output_directory));
