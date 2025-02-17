@@ -1,10 +1,9 @@
-This program computes the electric field due to a spherical scatterer placed
-at origin under plane wave illumination.
+This program computes the electric field due to a spherical scatterer centered at origin
+under plane wave illumination.
 
-The function "mie_series" calculates the complex amplitude of the electric
-and magnetic fields for a plane wave, linearly polarised in the
-x-direction, propagating in the positive z-direction, for a sphere
-located at the origin.
+The function "mie_series" calculates the complex amplitude of the electric and magnetic
+fields for a plane wave, linearly polarised in the x-direction, propagating in the
+positive z-direction, for a sphere centered at the origin.
 
 Where:
 
