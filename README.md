@@ -1,5 +1,5 @@
 This codebase contains the implementation of the beam propagation method (BPM) for
-propagation  of light through brain tissue models.
+propagation  of light through tissue models.
 Different examples are provided to demonstrate the usage.
 The method can be used to simulate large tissue models.
 
@@ -23,7 +23,7 @@ The PSTD is a numerical method to solve Maxwell's equation. While this method ca
 considered as more rigous than BPM, it is computationally demanding. We provide examples
 where we compare the solution obtain using both PSTD and BPM for small enough problems.
 The PSTD method is implemented in the [TDMS repository](https://github.com/UCL/TDMS) and
-we provide examples of the its usage for the problem of interest.
+we provide examples of its usage for the problem of interest.
 
 # Source Field Computation
 The BPM can be run using a variety of illumination sources including plane wave and
