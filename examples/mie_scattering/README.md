@@ -1,5 +1,5 @@
 The subfolders contain the code for computing electric field using Mie theory for a
-dielectric sphere placed at the origin.
+dielectric sphere centered at the origin.
 The illumination field is a plane wave propagating along the z-axis and linearly
 polarized along the x-axis.
 - The folder "simple_mie_example/" provides an example for computing electric filed using Mie theory.
