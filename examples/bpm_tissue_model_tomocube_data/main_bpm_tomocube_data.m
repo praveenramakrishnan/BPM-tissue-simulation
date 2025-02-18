@@ -21,7 +21,7 @@ num_lambda_x = num2str(length_along_x/lambda);
 num_lambda_y = num2str(length_along_y/lambda);
 num_lambda_z = num2str(length_along_z/lambda);
 
-% The portion of refractive index data used as defined in 'src/utils_bpm_input/make_refractive_index_data_tomocube.m'
+% The portion of refractive index data used as defined in 'src/utils_simulation_setup/make_refractive_index_data_tomocube.m'
 scattering_geometry = '3';
 
 % Select source type (plane wave or focused beam)
