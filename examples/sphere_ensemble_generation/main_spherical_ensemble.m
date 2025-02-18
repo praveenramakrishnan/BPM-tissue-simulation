@@ -1,4 +1,4 @@
-addpath('../../src/utils_bpm_input/utils_sphere_code');
+addpath('../../src/utils_simulation_setup/utils_sphere_code');
 clear all; close all;
 recompute_ensemble = true;
 lambda = 920e-9;
