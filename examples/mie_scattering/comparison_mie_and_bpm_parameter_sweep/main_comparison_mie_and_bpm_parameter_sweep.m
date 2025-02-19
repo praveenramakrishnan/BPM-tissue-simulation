@@ -48,7 +48,7 @@ for iloop_medium = 1:num_refractive_indices
 
         % Copy created data files to output directory
         if ~isempty(dir('*.mat'))
-            system(append('cp *.mat ', output_directory));
+            copyfile('*.mat', output_directory);
         end
 
         % Make grid
@@ -191,5 +191,5 @@ end
 
 % Clean the directory
 if ~isempty(dir('*.mat'))
-    system('rm *.mat ');
+    delete('*.mat');
 end
