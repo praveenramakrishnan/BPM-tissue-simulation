@@ -73,7 +73,7 @@ filename_sphere_ensemble_params = append(output_directory, ...
 
 % Move created data files to output directory
 if ~isempty(dir('*.mat'))
-    system(append('mv *.mat ', output_directory));
+    movefile('*.mat', output_directory);
 end
 
 display("Begin BPM simulation");
