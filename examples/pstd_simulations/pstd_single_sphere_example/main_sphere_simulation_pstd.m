@@ -1,6 +1,7 @@
 % Add path to library functions
 clear all; close all;
 run('../tdms_location.m');
+addpath('../pstd_source_functions');
 addpath(append(tdms_root, 'tdms/tests/system/data/input_generation/matlab'));
 addpath(genpath('../../../src/utils_simulation_setup/'));
 addpath('../../../src/utils_pstd_solution/');
@@ -12,7 +13,6 @@ recompute_material_grid = true;
 recompute_efield_initial_pstd = true;
 recompute_pstd_setup = true;
 recompute_pstd_solution = true;
-recompute_post_process_pstd_solution = true;
 simulate_background = false;
 
 % Load input parameters
@@ -29,14 +29,15 @@ output_directory = append('./simulations_pstd_', source_type, '_', ...
     num_lambda_x, 'lx', num_lambda_y, 'lx', num_lambda_z, 'l/');
 
 if simulate_background
-    output_directory = append(output_directory, 'simulation_background/');
+    output_directory = append(output_directory, 'simulations_background/');
 end
 
 % Filenames
 filename_grid = append(output_directory, 'grid_data.mat');
-filename_material_grid = append(output_directory, 'material_grid_data.mat');
-filename_refractive_index_data = append(output_directory, 'refractive_index_data_3d.mat');
-filename_efield_initial_pstd = append(output_directory, 'efield_initial_pstd.mat');
+filename_pstd_material_grid = append(output_directory, 'material_grid_data.mat');
+filename_refractive_index_data = append(output_directory, 'refractive_index_data.mat');
+filename_pstd_efield_initial = append(output_directory, 'efield_initial_pstd.mat');
+filename_efield_initial = append(output_directory, 'efield_initial.mat');
 filename_pstd_setup = append(output_directory, 'setup_pstd_simulation.mat');
 filename_pstd_iterations = append(output_directory, 'pstd_simulation_iterations.txt');
 filename_pstd_output_data =  append(output_directory, 'pstd_output_data.mat');
@@ -62,7 +63,7 @@ display("End make grid");
 
 % Parameters defining the sphere
 radius_sphere_list = [radius_sphere];
-x_sphere_center_list = [[0, 0, 0]];
+x_sphere_center_list = [[0, 0, z_grid(ceil(end/2))]];
 if simulate_background
     refractive_index_sphere_list = [refractive_index_background];
 else
@@ -96,7 +97,7 @@ if recompute_material_grid
         create_material_grid_sphere(filename_input_parameters_pstd, ...
         radius_sphere_list, x_sphere_center_list, ...
         refractive_index_sphere_list);
-    save(filename_material_grid, 'material_matrix', 'composition_matrix', '-v7.3');
+    save(filename_pstd_material_grid, 'material_matrix', 'composition_matrix', '-v7.3');
 end
 toc;
 display('End creating material grid file');
@@ -106,13 +107,17 @@ tic;
 if recompute_efield_initial_pstd
     % use iteratefdtd_matrix to set up illumination file
     iteratefdtd_matrix(filename_input_parameters_pstd, 'illsetup', ...
-    filename_efield_initial_pstd, filename_material_grid, '');
-end
-if exist(filename_efield_initial_pstd)
-    efield_initial_pstd = squeeze(load(filename_efield_initial_pstd).Ksource(1, :, :));
+    filename_pstd_efield_initial, filename_pstd_material_grid, '');
 end
 toc;
 display("End make PSTD source");
+
+% Save initial electric field on the input plane
+if exist(filename_pstd_efield_initial)
+    % A factor of 0.5 is required die to compact source condition
+    efield_initial = 0.5*squeeze(load(filename_pstd_efield_initial).Ksource(1, :, :));
+    save(filename_efield_initial, 'efield_initial', '-v7.3');
+end
 
 display("Start make PSTD simulation setup");
 tic;
@@ -120,7 +125,7 @@ if recompute_pstd_setup
     display('Begin iterate fdtd calculation for sphere file setup');
     % use iteratefdtd_matrix to set up file for tdms execution
     iteratefdtd_matrix(filename_input_parameters_pstd, 'filesetup', filename_pstd_setup,...
-        filename_material_grid, filename_efield_initial_pstd);
+        filename_pstd_material_grid, filename_pstd_efield_initial);
 end
 toc;
 display("End make PSTD simulation setup");
@@ -128,11 +133,13 @@ display("End make PSTD simulation setup");
 % Run the PSTD simulation
 display("Begin PSTD solution");
 if recompute_pstd_solution
+    tic;
     system(append('echo > ', filename_pstd_iterations));
     run_tdms_command_sphere = append('tdms ', filename_pstd_setup, ' ', ...
         filename_pstd_output_data, ' >> ', ...
         filename_pstd_iterations);
     system(run_tdms_command_sphere);
+    toc;
 end
 display("End PSTD solution");
 
@@ -143,21 +150,18 @@ end
 
 % Post-process the PSTD solution
 display("Begin post process PSTD solution");
-if recompute_post_process_pstd_solution
-    data_pstd_output = load(filename_pstd_output_data);
-    % Reshape the output field data
-    efield_samples = data_pstd_output.campssample;
-    [i, j, k] = size(ii);
-    efield_propagated_pstd = zeros(i, j, k);
-    efield_propagated_pstd(:) = efield_samples(:);
-    % Save the solution
-    save(filename_pstd_output_efield, 'efield_propagated_pstd', 'x_grid', 'y_grid');
-end
+data_pstd_output = load(filename_pstd_output_data);
+% Reshape the output field data
+efield_samples = data_pstd_output.campssample;
+efield_propagated_pstd = zeros(num_samples_x, num_samples_y, num_samples_z);
+efield_propagated_pstd(:) = efield_samples(:);
+% Save the solution
+save(filename_pstd_output_efield, 'efield_propagated_pstd', 'x_grid', 'y_grid');
 display("End post process PSTD solution");
 
 % Plot results
 figure_incident = figure(1);
-imagesc(1e6*x_grid, 1e6*y_grid, abs(efield_initial_pstd));
+imagesc(1e6*x_grid, 1e6*y_grid, abs(efield_initial));
 xlabel('x ($\mu$m)', 'interpreter', 'latex');
 ylabel('y ($\mu$m)', 'interpreter', 'latex');
 colorbar;
