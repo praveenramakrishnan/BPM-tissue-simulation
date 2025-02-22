@@ -111,8 +111,8 @@ else
     error(append('File ', filename_bpm_efield_output, ' not found.'));
 end
 display("End BPM solution");
-% Compare the solutions
 
+% Compare the solutions
 figure_incident = figure(1);
 imagesc(1e6*x_grid, 1e6*y_grid, abs(efield_initial));
 xlabel('x ($\mu$m)', 'interpreter', 'latex');

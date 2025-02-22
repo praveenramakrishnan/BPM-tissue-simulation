@@ -30,6 +30,9 @@ illorigin = [round(I/2), round(J/2), K_origin];
 % Additional shift in z axis
 z_launch = 0;
 
+% BPM solver parameters
+num_bpm_planes = 150;
+
 % Refractive index and sphere parameters
 refractive_index_sphere = 1.4;
 refractive_index_background = 1.3333;
