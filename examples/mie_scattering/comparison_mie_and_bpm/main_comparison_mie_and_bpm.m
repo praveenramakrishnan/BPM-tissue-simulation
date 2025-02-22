@@ -168,7 +168,7 @@ hold on;
 plot(1e6*y_grid, abs(efield_propagated_mie(find(x_grid==0), :, end)), 'DisplayName', 'Mie');
 xlabel('y ($\mu$m)', 'interpreter', 'latex');
 ylabel('|E| (V/m)');
-xlim([min(1e6*x_grid), max(1e6*x_grid)]);
+xlim([min(1e6*y_grid), max(1e6*y_grid)]);
 legend('location', 'northeast');
 grid on;
 saveas(figure_bpm_1d_along_y, append(output_directory, ...

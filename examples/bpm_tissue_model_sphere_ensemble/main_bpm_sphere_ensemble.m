@@ -200,10 +200,6 @@ hold off;
 xlabel('x ($\mu$m)', 'interpreter', 'latex');
 ylabel('|E| (V/m)');
 xlim([min(1e6*x_grid), max(1e6*x_grid)]);
-% title(append('Magnitude of electric field at the plane z=', ...
-%     num2str(z_grid_measurement), 'm'));
-% xticks('manual');
-% xticks(x_grid_ticks);
 legend;
 grid on;
 if simulate_background
@@ -219,11 +215,7 @@ plot(1e6*y_grid, abs(efield_propagated_bpm(find(x_grid==0), :)), 'DisplayName', 
 hold off;
 xlabel('y ($\mu$m)', 'interpreter', 'latex');
 ylabel('|E| (V/m)');
-xlim([min(1e6*x_grid), max(1e6*x_grid)]);
-% title(append('Magnitude of electric field at the plane z=', ...
-%     num2str(z_grid_measurement), 'm'));
-% xticks('manual');
-% xticks(x_grid_ticks);
+xlim([min(1e6*y_grid), max(1e6*y_grid)]);
 legend('location', 'northeast');
 grid on;
 if simulate_background

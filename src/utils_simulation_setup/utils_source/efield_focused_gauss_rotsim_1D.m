@@ -46,12 +46,16 @@ function [E] = efield_focused_gauss_rotsim_1D(X,Y,Z, lambda, nvec, NA, ntheta)
     
     Ex = I0_int + cos(2*THETA).*I2_int;
     Ey = sin(2*THETA).*I2_int;
-
     
     [Ex0,Ey0,Ez0] = richwolfincident(NA/nvec,2*pi/lambda*nvec,0,0,0,F,ntheta);
-    Ex = Ex/Ex0;
-    Ey = Ey/Ey0;
-    
+    if abs(Ex0)>0
+        Ex = Ex/Ex0;
+    end
+
+    if abs(Ey0)>0
+        Ey = Ey/Ey0;
+    end
+
     E{1}(:) = Ex;
     E{2}(:) = Ey;
 

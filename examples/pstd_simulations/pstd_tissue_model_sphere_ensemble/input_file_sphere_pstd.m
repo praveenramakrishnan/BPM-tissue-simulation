@@ -1,4 +1,43 @@
+% General Parameters 
+lambda = 1300e-9; % wavelength
+
+% Dimensions of the domain
+length_along_x = 10*lambda;
+length_along_y = 10*lambda;
+length_along_z = 5*lambda;
+
+% Grid discretisation size
+delta.x = lambda/10;
+delta.y = lambda/10;
+delta.z = lambda/10;
+
+% Number of points along each axis
+I = round(length_along_x/delta.x);
+J = round(length_along_y/delta.y);
+K = round(length_along_z/delta.z);
+%
+% Type of source used
+source_type = 'focused';
+% source_type = 'plane';
+
+% Location of source
+source_interface_location_z = 10;
+
+% Local of the origin of the domain in terms of number of cells
+K_origin = K;
+illorigin = [round(I/2), round(J/2), K_origin];
+
+% Additional shift in z axis
+z_launch = 0;
+
+% Refractive index and sphere parameters
+refractive_index_sphere = 1.4;
+refractive_index_background = 1.3333;
+radius_sphere = lambda;
+
+% Input file for PSTD simulation used by functions in the TDMS repository
 % The inputs are divided into the following sections:
+% 0. Basic parameters and constants
 % 1. Grid,
 % 2. Source,
 % 3. Simulation type,
@@ -9,13 +48,15 @@
 % 0) Basic parameters and constants
 
 c_speed_of_light = 2.997924580105029e+08;
-lambda = 1300e-9;
+% lambda = data_input.lambda;
 
 %Use linear interpolation
 use_bli=0;
 
 %Select FDTD or PSTD simulation
 use_pstd=1;
+
+% source_type = data_input.source_type;
 
 % 1) Grid
 % These control the resolution and size of the grid as well as the
@@ -27,25 +68,22 @@ use_pstd=1;
 % three dimensional simulations simulations respectively. The default value is 3 dimension. 
 dimension = '3';
 
-length_along_x = 150*lambda;
-length_along_y = 150*lambda;
-length_along_z = 55*lambda;
+% Dimensions of the domain
+% length_along_x = data_input.length_along_x;
+% length_along_y = data_input.length_along_y;
+% length_along_z = data_input.length_along_z;
 
 % size of Yee cell in metres
 % set grid size to be same as pixel size of refractive index data
-delta.x = lambda/10; 
-delta.y = lambda/10;
-delta.z = lambda/10;
+% delta.x = data_input.delta.x; 
+% delta.y = data_input.delta.y;
+% delta.z = data_input.delta.z;
 
 % Define the grid size
 % I,J, K:The number of non-PML cells in the FDTD grid in in the the x, y, z directions.
-% I = 640;
-% J = 640;
-% K = 170;
-
-I = round(length_along_x/delta.x);
-J = round(length_along_y/delta.y);
-K = round(length_along_z/delta.z);
+% I = data_input.I;
+% J = data_input.J;
+% K = data_input.K;
 
 % Each element of multilayer gives the index of the Yee cell along the z-direction of an interface.
 % A simulation without a multilayer structure, ie, homogeneous space would have multilayer set to [].
@@ -53,7 +91,7 @@ multilayer = [];
 
 % Possibly complex non-dispersive relative permittivity of the background
 % material which may be a multilayer structure.
-n_background = 1.3333;
+n_background = refractive_index_background;
 epsr = [n_background^2]; %epsr = (refractive index)^2
 
 % radian plasma frequency of each layer
@@ -83,7 +121,7 @@ intmatprops = 0;
 f_an =  c_speed_of_light/lambda; 
 
 % describe when the incident field is introduced into the grid
-source_interface_location_z = 10;
+% source_interface_location_z = 10;
 interface.I0 = [5 0];
 interface.I1 = [I-5 0];
 interface.J0 = [5 0];
@@ -92,21 +130,17 @@ interface.K0 = [source_interface_location_z 1];
 interface.K1 = [K-5 0];
 
 % these are the function names used to generate the field
-efname = 'efield_plane';
+efname = append('efield_', source_type, '_lambda_', num2str(lambda/1e-9), 'nm');
 hfname = '';
 
 % this defines the point about which the illumination is centred in
 % the so called 'interior' coordinate system
 % this means the the illumination is actually focussed on a point 25
 % cells in front of the interface.
-% K_focus = K-50;
-length_measurement_cube = 10e-6;
-K_focus = K-ceil(0.5*length_measurement_cube/delta.z);
-illorigin = [ceil(I/2), ceil(J/2), K_focus];
-% +- 2 microns around origin (4 micrometer cube).
+% illorigin = data_input.illorigin;
 
 % the z coordinate of illorigin cell
-% z_launch = 0;
+% z_launch = data_input.z_launch;
 
 %the wavelength width (in m). This corresponds to the FWHM of the
 wavelengthwidth = 100e-9;
@@ -150,13 +184,12 @@ runmode = 'complete';
 % These must be chosen by someone with some experience with FDTD.
 % Some of the source parameters also fit into this category.
 
-
 %time step - subject to restriction
-factor_time_step_size = 1;
-dt = 1/factor_time_step_size*2/sqrt(3)/pi*delta.x/(3e8/1.3)*.95;
+dt = 2/sqrt(3)/pi*delta.x/(3e8/1.3)*.95;
 
 %define the number of time steps
-Nt=4000*factor_time_step_size;
+% Nt=4000;
+Nt=2000;
 
 k_vec = 2*pi/lambda;
 
@@ -188,23 +221,10 @@ phasorsurface = [5 I-5 5 J-5 5 K-5];
 % divide FDTD lattice dimension
 % phasorinc = [1, 1, 1,];
 
-dI = ceil(0.5*length_measurement_cube/delta.x);
-dJ = ceil(0.5*length_measurement_cube/delta.y);
-dK = ceil(0.5*length_measurement_cube/delta.z);
+[ii,jj,kk] = ndgrid(1:I, 1:J, K_origin);
 
-% [ii,jj,kk] = ndgrid(ceil(I/2),ceil(J/2),1:K);
-% K-20-dk: k-20+dk  dk = ceil(4 microns/delta.z) 
-[ii,jj,kk] = ndgrid(ceil(I/2)-dI:ceil(I/2)+dI,ceil(J/2)-dJ:ceil(J/2)+dJ,K_focus-dK:K_focus+dK);
-
-% [ii,jj,kk] = ndgrid(3,3,1:K);
-% [ii,jj,kk] = ndgrid(300:(I-300),300:(J-300),[50:50:300 (illorigin(3)-50):(illorigin(3)+50)]);
 campssample.vertices = [ii(:) jj(:) kk(:)];
-campssample.components = [1 2 3];
-
-% fieldsample.i = 300:(I-300);
-% fieldsample.j = 300:(J-300);
-% fieldsample.k = [50:50:300 (illorigin(3)-50):(illorigin(3)+50)];
-% fieldsample.n = [2 4];
+campssample.components = [1];
 
 fieldsample.i = [];
 fieldsample.j = []; 
@@ -234,4 +254,4 @@ Dyu = 10;
 Dzl = 10;
 Dzu = 10;
 
-save(append('variables_', mfilename, '.mat'));
+save(mfilename);

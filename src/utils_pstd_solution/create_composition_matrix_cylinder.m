@@ -1,4 +1,4 @@
-function [composition_matrix] = create_composition_matrix_cylinders(x_ndgrid,z_ndgrid, radius_cylinder_list, x_center_cylinder_list)
+function [composition_matrix] = create_composition_matrix_cylinder(x_ndgrid,z_ndgrid, radius_cylinder_list, x_center_cylinder_list)
    num_cylinders = numel(radius_cylinder_list);
    composition_matrix = [];
    for iloop_cylinder = 1:num_cylinders
