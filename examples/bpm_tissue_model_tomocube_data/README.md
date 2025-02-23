@@ -1,5 +1,5 @@
-This example simulates the propagation of light through the sphere based
-model of the tissue. The randomly distributed ensemble of spheres of a specified concentration is generated in the volume.
+This example simulates the propagation of light using the measured refractive index of
+moise brain tissue (tomocube data).
 
 # Input files
  - 'input_parameters_bpm.m' is used to specify the parameters related to the BPM simulation. 
