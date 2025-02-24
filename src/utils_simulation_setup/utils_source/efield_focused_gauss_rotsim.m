@@ -6,8 +6,9 @@ function [E] = efield_focused_gauss_rotsim(X,Y,Z, lambda, nvec, NA, ntheta, nphi
         % Default parameters 
         lambda = 920e-9;
         nvec = 1.3333; 
+        NA = 1.05;
         ntheta = 1600;
-        nphi = 2000;    NA = 1.05;
+        nphi = 2000;
     end
     
     RHO = sqrt(X.^2 + Y.^2);

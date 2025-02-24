@@ -5,8 +5,9 @@ addpath(genpath('../../src/'));
 recompute_efield_initial = true;
 recompute_refractive_index = true;
 save_refractive_index = true;
-simulate_background = false;
 recompute_bpm_solution = true;
+
+simulate_background = false;
 
 show_plot = true;
 z_grid_measurement = 0e-6; % z coordinate at which BPM output is computed
@@ -29,6 +30,10 @@ source_type = 'focused';
 output_directory = append('./simulations_bpm_', source_type, '_', ...
     num_lambda_x, 'lx', num_lambda_y, 'lx', num_lambda_z, 'l_', ...
     'nslices_', num2str(num_region_slices), '/');
+
+if simulate_background
+    output_directory = append(output_directory, 'simulations_background/');
+end
 
 % Filenames
 filename_grid = append(output_directory, 'grid_data');
@@ -144,15 +149,8 @@ for iloop_slice = 1:num_region_slices
     display("End compute BPM solution");
 
     % Save electric field of the slice to file
-    if simulate_background
-      save(append(filename_efield_initial, ...
-          '_background_slice_', num2str(iloop_slice)), ...
-            'efield_initial_slice', '-v7.3');
-    else
-        save(append(filename_efield_initial, ...
-            '_slice_', num2str(iloop_slice)), ...
-            'efield_initial_slice', '-v7.3');
-    end
+    save(append(filename_efield_initial, '_slice_', num2str(iloop_slice)), ...
+        'efield_initial_slice', '-v7.3');
 
     % Update electric field of the slice to file
     efield_initial_slice = efield_propagated_bpm;
@@ -169,13 +167,7 @@ title("Electric field magnitude (V/m)");
 xticks('manual');
 x_grid_ticks = yticks;
 xticks(x_grid_ticks);
-if simulate_background
-    saveas(figure_incident, append(output_directory, ...
-        'figure_bpm_incident_2d_background.png'));
-else
-    saveas(figure_incident, append(output_directory, ...
-        'figure_bpm_incident_2d.png'));
-end
+saveas(figure_incident, append(output_directory, 'figure_bpm_incident_2d.png'));
 
 figure_bpm_2d_full = figure(1002);
 imagesc(1e6*x_grid, 1e6*y_grid, abs(efield_propagated_bpm));
@@ -186,13 +178,7 @@ colorbar;
 xticks('manual');
 x_grid_ticks = yticks;
 xticks(x_grid_ticks);
-if simulate_background
-    saveas(figure_bpm_2d_full, append(output_directory, ...
-        'figure_bpm_sphere_ensemble_2d_backgorund.png'));
-else 
-    saveas(figure_bpm_2d_full, append(output_directory, ...
-        'figure_bpm_sphere_ensemble_2d.png'));
-end
+saveas(figure_bpm_2d_full, append(output_directory, 'figure_bpm_sphere_ensemble_2d.png'));
 
 figure_bpm_1d_along_x = figure(1);
 plot(1e6*x_grid, abs(efield_propagated_bpm(:, find(y_grid==0))), 'DisplayName', 'BPM');
@@ -202,13 +188,7 @@ ylabel('|E| (V/m)');
 xlim([min(1e6*x_grid), max(1e6*x_grid)]);
 legend;
 grid on;
-if simulate_background
-    saveas(figure_bpm_1d_along_x, append(output_directory, ...
-        'figure_bpm_sphere_ensemble_along_x_background.png'));
-    else
-    saveas(figure_bpm_1d_along_x, append(output_directory, ...
-        'figure_bpm_sphere_ensemble_along_x.png'));
-end
+saveas(figure_bpm_1d_along_x, append(output_directory, 'figure_bpm_sphere_ensemble_along_x.png'));
 
 figure_bpm_1d_along_y = figure(2);
 plot(1e6*y_grid, abs(efield_propagated_bpm(find(x_grid==0), :)), 'DisplayName', 'BPM');
@@ -218,13 +198,7 @@ ylabel('|E| (V/m)');
 xlim([min(1e6*y_grid), max(1e6*y_grid)]);
 legend('location', 'northeast');
 grid on;
-if simulate_background
-    saveas(figure_bpm_1d_along_y, append(output_directory, ...
-        'figure_bpm_sphere_ensemble_along_y_background.png'));
-else
-    saveas(figure_bpm_1d_along_y, append(output_directory, ...
-        'figure_bpm_sphere_ensemble_along_y.png'));
-end
+saveas(figure_bpm_1d_along_y, append(output_directory, 'figure_bpm_sphere_ensemble_along_y.png'));
 
 display('End of BPM simulation');
 

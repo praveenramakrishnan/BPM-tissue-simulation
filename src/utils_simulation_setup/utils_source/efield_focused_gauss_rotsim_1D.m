@@ -7,7 +7,7 @@ function [E] = efield_focused_gauss_rotsim_1D(X,Y,Z, lambda, nvec, NA, ntheta)
         lambda = 920e-9; % wavelength
         nvec = 1.3333; % background refractive index
         NA = 1.05; % numerical aperture
-        ntheta = 10000; % number of integration points
+        ntheta = 2000; % number of integration points
     end
 
     RHO = sqrt(X.^2 + Y.^2);
